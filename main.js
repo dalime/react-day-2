@@ -25,11 +25,14 @@ const Counter = React.createClass({
 })
 
 const NewMessageForm = React.createClass({
+  addMessage: function() {
+    this.props.addMessage('hiya!');
+  },
   render: function() {
     return(
       <div>
         <input type="text"/>
-        <button>Add</button>
+        <button onClick={this.addMessage}>Add</button>
       </div>
     )
   }
@@ -52,18 +55,28 @@ const MessageList = React.createClass({
 const MessageBoard = React.createClass({
   getInitialState: function() {
     return {
-      messages: [
-      {id: 1, text: 'Hello!'},
-      {id: 2, text: 'How are you?'},
-      {id: 3, text: 'I am well'}
-    ]
+      messages: []
   };
+  },
+  addMessage: function(text) { //takes message text as argument
+    //need to create message object
+    let message = {
+      text,
+      id: uuid()
+    };
+    console.log('message: ', message);
+    // need to add to messages array
+
+    this.setState({
+      messages: this.state.messages.concat(message)
+    })
+
   },
   render: function() {
     return (
       <div>
         <h1>MessageBoard</h1>
-        <NewMessageForm />
+        <NewMessageForm addMessage={this.addMessage}/>
         <MessageList messages={this.state.messages}/>
       </div>
     )
