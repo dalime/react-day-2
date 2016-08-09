@@ -25,13 +25,24 @@ const Counter = React.createClass({
 })
 
 const NewMessageForm = React.createClass({
+  getInitialState: function() {
+    return {
+      text: ""
+    }
+  },
   addMessage: function() {
-    this.props.addMessage('hiya!');
+    this.props.addMessage(this.state.text);
+    this.setState({text: ""});
+  },
+  onInputChange: function(event) { //this is like an event handler
+    this.setState({text: event.target.value})
   },
   render: function() {
     return(
       <div>
-        <input type="text"/>
+        <input type="text" value={this.state.text} onChange={this.onInputChange}/>
+        {/*<input type="text" value={this.state.text} onChange={e => {this.setState({text: e.target.value})}}/>*/}
+        {/*The above two lines are the same*/}
         <button onClick={this.addMessage}>Add</button>
       </div>
     )
@@ -76,7 +87,7 @@ const MessageBoard = React.createClass({
     return (
       <div>
         <h1>MessageBoard</h1>
-        <NewMessageForm addMessage={this.addMessage}/>
+        <NewMessageForm addMessage={this.addMessage} />
         <MessageList messages={this.state.messages}/>
       </div>
     )
