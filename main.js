@@ -49,10 +49,47 @@ const NewMessageForm = React.createClass({
   }
 });
 
+const MessageDeleteButton = React.createClass({
+  deleteMessage: function() {
+    console.log(this.props.deleteId);
+    /*for (var i = 0; i < this.props.messages; i++) {
+      console.log(i);
+      if (this.prop.messages[i].id === messageId) {
+        index = i;
+      }
+    }*/
+    /*this.setState({
+      messages: this.prop.messages.splice(index, 1);
+    })*/
+  },
+  render: function() {
+    return (
+      <button className="btn btn-default" onClick={this.deleteMessage}>Delete</button>
+    )
+  }
+})
+
+const MessageUpdateButton = React.createClass({
+  updateMessage: function() {
+    console.log(this.props.updateId);
+  },
+  render: function() {
+    return (
+      <button className="btn btn-primary" onClick={this.updateMessage}>Update</button>
+    )
+  }
+})
+
 const MessageList = React.createClass({
   render: function() {
     let messages = this.props.messages.map(message => {
-      return <li key={message.id}>{message.text}</li>
+      return (
+        <li key={message.id}>
+          {message.text}
+          <MessageDeleteButton deleteId={message.id} />
+          <MessageUpdateButton updateId={message.id} />
+        </li>
+      )
     });
 
     return (
