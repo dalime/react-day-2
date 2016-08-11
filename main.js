@@ -142,16 +142,17 @@ const MessageBoard = React.createClass({
     this.setState({messages: newArr});
   },
   updateMessage: function(msgId, msgText) {
+    let updMessages = this.state.messages;
     let updMessage = {
       text: msgText,
       id: msgId
     };
-    for (let i = 0; i < this.state.messages.length; i++) {
-      if (this.state.messages[i].id === msgId) {
-        this.state.messages[i] = updMessage;
+    for (let i = 0; i < updMessages.length; i++) {
+      if (updMessages[i].id === msgId) {
+        updMessages[i] = updMessage;
       }
     }
-    this.setState({messages: this.state.messages});
+    this.setState({messages: updMessages});
   },
   render: function() {
     return (
