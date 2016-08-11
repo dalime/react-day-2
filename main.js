@@ -101,12 +101,11 @@ const MessageLi = React.createClass({
 
 const MessageList = React.createClass({
   render: function() {
-    let messages = this.props.messages.map(message => {
+    let messages = this.props.liMessages.map(message => {
       return (
         <MessageLi key={message.id} value={message.text} deleteMsg={this.props.delete} updateMsg={this.props.update} msgId={message.id}/>
       )
     });
-
     return (
       <ul>
         {messages}
@@ -116,10 +115,26 @@ const MessageList = React.createClass({
 })
 
 const MessageBoard = React.createClass({
+  /*getInitialState() {
+    New ES6 way of declaring function
+  }*/
   getInitialState: function() {
-    return {
-      messages: []
+    try {
+      var messages = JSON.parse(localStorage.messages); //Use JSON to read messages stored locally
+    } catch(err) { //gets initial state as whatever is in local storage
+      var messages = [];
     }
+
+    return {messages};
+    /*
+    return (
+    messages: [];
+  )
+    */
+  },
+  componentDidUpdate() {
+    // STATE/PROPS WERE MODIFIED
+    localStorage.messages = JSON.stringify(this.state.messages);
   },
   addMessage: function(text) { //takes message text as argument
     //need to create message object
@@ -127,15 +142,11 @@ const MessageBoard = React.createClass({
       text,
       id: uuid()
     };
-    console.log('message: ', message);
-    // need to add to messages array
-
     this.setState({
       messages: this.state.messages.concat(message)
-    })
+    });
   },
   deleteMessage: function(msgId) {
-    let index = 0;
     let newArr = this.state.messages.filter(message => {
       return message.id !== msgId;
     });
@@ -159,7 +170,7 @@ const MessageBoard = React.createClass({
       <div>
         <h1>MessageBoard</h1>
         <NewMessageForm addMessage={this.addMessage} />
-        <MessageList messages={this.state.messages} delete={this.deleteMessage} update={this.updateMessage}/>
+        <MessageList liMessages={this.state.messages} delete={this.deleteMessage} update={this.updateMessage}/>
       </div>
     )
   }
